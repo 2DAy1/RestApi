@@ -14,7 +14,7 @@ def create_app():
 
 def create_api(app):
     api = Api(app)
-    api.add_resource(DriversList, '/api/v1/report')
+    api.add_resource(DriversList, '/api/v1/report/')
     api.init_app(app)
     return api
 
