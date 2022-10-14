@@ -5,7 +5,7 @@ from flasgger import Swagger
 from flask import make_response
 import json
 from simplexml import dumps
-
+from flask_swagger_ui import get_swaggerui_blueprint
 
 
 def create_app():
@@ -19,11 +19,21 @@ def create_app():
 
 
 def create_swagger(app):
-    app.config["SWAGGER"] = {
-        'title': 'Drivers List',
-        'doc_dir': './examples/docs/'
-    }
+    ### swagger specific ###
+    SWAGGER_URL = '/swagger'
+    API_URL = '/static/drivers.yml'
+    SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+        SWAGGER_URL,
+        API_URL,
+        config={
+            'app_name': "Seans-Python-Flask-REST-Boilerplate"
+        }
+    )
+    app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+    ### end swagger specific ###
+
     swagger = Swagger(app)
+
     return swagger
 
 
