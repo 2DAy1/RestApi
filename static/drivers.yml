@@ -19,12 +19,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Drivers'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Drivers'
         'default':
           description: All Errors
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+### Single_driver use if necessary
+#
 #  /drivers/{driver_code}:
 #    get:
 #      summary: Get Diver by code

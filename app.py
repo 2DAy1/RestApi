@@ -1,3 +1,5 @@
+import sys
+
 from flask import Flask
 from flask_restful import Api
 from handlers.api import DriversList
@@ -46,11 +48,13 @@ def create_api(app):
         resp.headers.extend(headers or {})
         return resp
 
+
     @api.representation('application/xml')
     def output_xml(data, code, headers=None):
         resp = make_response(dumps({'response': data}), code)
         resp.headers.extend(headers or {})
         return resp
+
 
     api.add_resource(DriversList, '/api/v1/report/')
     api.init_app(app)
