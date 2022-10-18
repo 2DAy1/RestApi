@@ -5,6 +5,11 @@ parameters:
     enum: ['json','xml']
     required: true
     default: json
+  - name: order
+    in: query
+    type: string
+    enum: ['desc','ask']
+    default: desc
 definitions:
   Driver:
     type: object

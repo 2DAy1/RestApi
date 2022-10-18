@@ -27,15 +27,25 @@ class DriversList(Resource):
 
     @swag_from('static/drivers.yml')
     def get(self):
-        format = request.args.get('format')
-        if format == 'xml':
-            d = dicttoxml(DriversList.DRIVERS)
-            response = make_response(d)
-            response.headers['content-type'] = 'application/xml'
+        lis_format = request.args.get('format')
+        if lis_format:
+            if lis_format == 'xml':
+                d = dicttoxml(DriversList.DRIVERS)
+                response = make_response(d)
+                response.headers['content-type'] = 'application/xml'
+            elif lis_format == 'json':
+                d = jsonify(DriversList.DRIVERS)
+                response = make_response(d)
+                response.headers["Content-Type"] = "application/json"
+                return response
 
-        elif format == 'json':
-            d = jsonify(DriversList.DRIVERS)
-            response = make_response(d)
-            response.headers["Content-Type"] = "application/json"
+        order = request.args.get('order')
+        if order:
+            if order == "desc":
+                drivers = jsonify(DriversList.DRIVERS)
+            elif order == "ask":
+                drivers = jsonify(DriversList.DRIVERS)
+            return drivers
 
-        return response
+
+
