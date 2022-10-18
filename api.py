@@ -6,27 +6,34 @@ from flasgger import swag_from
 
 
 class DriversList(Resource):
-    DRIVERS = {}
+    @staticmethod
+    def get_drivers():
+        drivers = {}
 
-    for driver in report.create_drivers():
-        DRIVERS[driver.code] = {
-                    "number":
+        for driver in report.create_drivers():
+            drivers[driver.code] = {
+                "number":
                     driver.number,
-                    "name":
+                "name":
                     driver.name,
-                    "company":
+                "company":
                     driver.company,
-                    "result":
+                "result":
                     driver.result
-                }
+            }
+        return drivers
 
+    DRIVERS = get_drivers()
+
+    @swag_from('static/drivers.yml')
     def get(self):
-        if request.args.get('format') == 'xml':
+        format = request.args.get('format')
+        if format == 'xml':
             d = dicttoxml(DriversList.DRIVERS)
             response = make_response(d)
             response.headers['content-type'] = 'application/xml'
 
-        elif request.args.get('format') == 'json':
+        elif format == 'json':
             d = jsonify(DriversList.DRIVERS)
             response = make_response(d)
             response.headers["Content-Type"] = "application/json"
