@@ -28,22 +28,17 @@ class DriversList(Resource):
         DRIVERS = DriversList.get_drivers(path)
 
         lis_format = request.args.get('format')
-        if lis_format:
+        order = request.args.get('order')
+        if lis_format or order:
+            drivers = DRIVERS
+            if order == "ask":
+                drivers = dict(list(DRIVERS.items())[::-1])
             if lis_format == 'xml':
-                d = dicttoxml(DRIVERS)
+                d = dicttoxml(drivers)
                 response = make_response(d)
                 response.headers['content-type'] = 'application/xml'
-                return response
             elif lis_format == 'json':
-                d = jsonify(DRIVERS)
-                response = make_response(d)
+                d = jsonify(drivers)
+                response = make_response(list(d))
                 response.headers["Content-Type"] = "application/json"
-                return response
-
-        order = request.args.get('order')
-        if order:
-            if order == "desc":
-                drivers = jsonify(DRIVERS)
-            elif order == "ask":
-                drivers = jsonify(DRIVERS)
-            return drivers
+            return response
