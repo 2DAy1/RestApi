@@ -16,7 +16,12 @@ class TestViews:
         assert response.status_code == 200
         assert response.headers['Content-Type'] == "application/xml"
 
-
+        # test order
+        response_desc = client.get(url, query_string={'order': "ask"})
+        response_ask = client.get(url, query_string={'order': "ask"})
+        assert response_ask.status_code == 200
+        assert response_desc.status_code == 200
+        assert response_ask.text == response_desc.text[:1]
 
 
 
