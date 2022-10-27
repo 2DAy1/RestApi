@@ -1,3 +1,5 @@
+import json
+
 from flask import jsonify, make_response, config, current_app, Blueprint
 from flask_restful import Resource, request
 from report_of_monaco_2018_racing_dan import report
@@ -35,7 +37,7 @@ class DriversList(Resource):
             elif order == "ask":
                 drivers = dict(list(DRIVERS.items())[::-1])
             if lis_format == 'json':
-                drivers = list(drivers.items())
+                drivers = json.dumps(drivers, indent=2)
                 response = make_response(drivers)
                 response.headers["content-type"] = "application/json"
             elif lis_format == 'xml':
