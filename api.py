@@ -24,21 +24,24 @@ class DriversList(Resource):
 
     @swag_from('static/drivers.yml')
     def get(self):
-        path = current_app.config.get("INFO")
+        path = current_app.config.get("PATH")
         DRIVERS = DriversList.get_drivers(path)
 
-        lis_format = request.args.get('format')
-        order = request.args.get('order')
+        lis_format = request.args.get('format', default='json')
+        order = request.args.get('order', default="desc")
         if lis_format or order:
-            drivers = DRIVERS
-            if order == "ask":
+            if order == "desc":
+                drivers = DRIVERS
+            elif order == "ask":
                 drivers = dict(list(DRIVERS.items())[::-1])
-            if lis_format == 'xml':
-                d = dicttoxml(drivers)
-                response = make_response(d)
+            if lis_format == 'json':
+                drivers = list(drivers.items())
+                response = make_response(drivers)
+                response.headers["content-type"] = "application/json"
+            elif lis_format == 'xml':
+                drivers = dicttoxml(drivers)
+                response = make_response(drivers)
                 response.headers['content-type'] = 'application/xml'
-            elif lis_format == 'json':
-                d = jsonify(drivers)
-                response = make_response(list(d))
-                response.headers["Content-Type"] = "application/json"
+            else:
+                return drivers
             return response

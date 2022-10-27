@@ -21,7 +21,7 @@ class TestViews:
         response_ask = client.get(url, query_string={'order': "ask"})
         assert response_ask.status_code == 200
         assert response_desc.status_code == 200
-        assert response_ask.text == response_desc.text[::1]
+        assert response_ask.json == response_desc.json[::-1]
 
 
 
